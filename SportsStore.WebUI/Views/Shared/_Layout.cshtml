@@ -9,8 +9,16 @@
     <script src="~/Scripts/modernizr-2.8.3.js"></script>
 </head>
 <body>
-    <div>
-        @RenderBody()
+    <div class="navbar navbar-inverse" role="navigation">
+        <a class="navbar-brand" href="#">SPORTS STORE</a>
+    </div>
+    <div class="row panel">
+        <div id="categories" class="col-xs-3">
+            @Html.Action("Menu", "Nav")
+        </div>
+        <div class="col-xs-8">
+            @RenderBody()
+        </div>
     </div>
 
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>

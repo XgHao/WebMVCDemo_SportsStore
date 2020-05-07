@@ -49,7 +49,7 @@ namespace SportsStore.WebUI.Infrastructure
             #endregion
 
 
-            #region 绑定商品存储库
+            #region 绑定商品存储库-单例
             kernel.Bind<IProductRepository>().To<EFProductRepository>().InSingletonScope();
             #endregion
         }

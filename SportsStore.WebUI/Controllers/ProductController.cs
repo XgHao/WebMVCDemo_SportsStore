@@ -1,4 +1,6 @@
 ﻿using SportsStore.Domain.Abstract;
+using SportsStore.WebUI.Models;
+using SportsStore.WebUI.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,9 @@ namespace SportsStore.WebUI.Controllers
 {
     public class ProductController : Controller
     {
+        /// <summary>
+        /// 产品存储库
+        /// </summary>
         private IProductRepository repository;
 
         public ProductController(IProductRepository _repository)
@@ -16,16 +21,32 @@ namespace SportsStore.WebUI.Controllers
             repository = _repository;
         }
         
-        //[HttpGet]
-        //public ActionResult List()
-        //{
-        //    return View(repository.Products);
-        //}
-
+        /// <summary>
+        /// 分页每页数
+        /// </summary>
         public int PageSize = 4;
-        public ViewResult List(int page = 1)
+        [HttpGet]
+        public ViewResult List(string category, int page = 1)
         {
-            return View(repository.Products.Skip((page - 1) * PageSize).Take(PageSize));
+            var prods = repository.Products
+                                     .Where(p => category == null || p.Category == category);
+
+            ProductListViewModel model = new ProductListViewModel
+            {
+                //筛选后的产品
+                Products = prods.OrderBy(p => p.Id).Skip((page - 1) * PageSize).Take(PageSize).ToList(),
+                //分页信息
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = page,
+                    TotalItems = prods.Count(),
+                    ItemsPerPage = PageSize
+                },
+                //当前分类
+                CurrentCategory = category
+            };
+
+            return View(model);
         }
     }
 }
