@@ -16,5 +16,17 @@ namespace SportsStore.Domain.Abstract
         /// 储存库-商品集合
         /// </summary>
         IEnumerable<Product> Products { get; }
+
+        /// <summary>
+        /// 保存商品
+        /// </summary>
+        /// <param name="product"></param>
+        void SaveProduct(Product product);
+
+        /// <summary>
+        /// 删除商品
+        /// </summary>
+        /// <param name="productId"></param>
+        Product DeleteProduct(int productId);
     }
 }

@@ -4,6 +4,8 @@ using SportsStore.Domain.Abstract;
 using SportsStore.Domain.Concrete;
 using SportsStore.Domain.Entities;
 using SportsStore.WebUI.Controllers;
+using SportsStore.WebUI.Infrastructure.Abstract;
+using SportsStore.WebUI.Infrastructure.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +53,19 @@ namespace SportsStore.WebUI.Infrastructure
 
             #region 绑定商品存储库-单例
             kernel.Bind<IProductRepository>().To<EFProductRepository>().InSingletonScope();
+            #endregion
+
+            #region 绑定订单处理器-邮箱
+            EmailSettings emailSettings = new EmailSettings
+            {
+                WriteAsFile = true
+            };
+
+            kernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>().WithConstructorArgument("settings", emailSettings);
+            #endregion
+
+            #region 绑定帐号验证器
+            kernel.Bind<IAuthProvider>().To<FromsAuthentication>();
             #endregion
         }
     }

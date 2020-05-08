@@ -20,6 +20,7 @@ namespace SportsStore.WebUI.Controllers
             return View();
         }
 
+        [ChildActionOnly]
         public PartialViewResult Menu(string category = null)
         {
             //已选中的分类
