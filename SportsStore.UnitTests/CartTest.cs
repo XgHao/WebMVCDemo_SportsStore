@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -97,6 +98,50 @@ namespace SportsStore.UnitTests
             Assert.AreEqual("", result.ViewName);
 
             Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+        }
+
+
+        [TestMethod]
+        public void Can_Retrieve_Image_Data()
+        {
+            //准备
+            Product prod = new Product
+            {
+                Id = 2,
+                Name = "Test",
+                ImageData = new byte[] { 1, 2, 3 },
+                ImageMimeType = "image/png"
+            };
+
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns(new List<Product> { p1, prod, p3 }.AsQueryable());
+
+            ProductController controller = new ProductController(mock.Object);
+
+            //动作
+            ActionResult result = controller.GetImage(2);
+
+            //断言
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(FileResult));
+            Assert.AreEqual(prod.ImageMimeType, (result as FileResult).ContentType);
+            
+        }
+
+        [TestMethod]
+        public void Cannot_Retrieve_Image_Data_For_Invalid_ID()
+        {
+            //准备
+            Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            mock.Setup(m => m.Products).Returns(new List<Product> { p1, p2, p3 }.AsQueryable());
+
+            ProductController controller = new ProductController(mock.Object);
+
+            //动作
+            ActionResult result = controller.GetImage(100);
+
+            //断言
+            Assert.IsNull(result);
         }
     }
 }

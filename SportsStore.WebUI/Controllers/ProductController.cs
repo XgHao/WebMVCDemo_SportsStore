@@ -28,6 +28,8 @@ namespace SportsStore.WebUI.Controllers
         [HttpGet]
         public ViewResult List(string category, int page = 1)
         {
+            var date = DateTime.Now.ToString();
+
             var prods = repository.Products
                                      .Where(p => category == null || p.Category == category);
 
@@ -47,6 +49,17 @@ namespace SportsStore.WebUI.Controllers
             };
 
             return View(model);
+        }
+
+        /// <summary>
+        /// 获取图片
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public FileContentResult GetImage(int Id)
+        {
+            var prod = repository.Products.FirstOrDefault(p => p.Id == Id);
+            return prod == null ? null : File(prod.ImageData, prod.ImageMimeType);
         }
     }
 }

@@ -19,3 +19,14 @@
 .validation-summary-valid {
     display: none;
 }
+
+.choose-file {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    background-color: transparent;
+    color: transparent;
+}
